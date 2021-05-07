@@ -1,0 +1,223 @@
+extends layout
+
+block content
+    html
+        head
+        body
+            #fish.fish
+            |
+            #fish2.fish
+            |
+            #fish3.fish
+            |
+            .question-box
+                h2 Would you like to say something?
+                |
+                button.yes-btn Yes
+            |
+            .form-box.hidden
+                #octo.octo
+                |
+                form(action='/savepost' method='POST' id='contact-form')
+                    .text-box
+                        label(for='message') Your Post
+                        |
+                        textarea#message(name='message', placeholder='Write text here....', cols='30', rows='8')
+                        |
+                        .btns-box
+                            button.send-btn.custom-btn(type='submit') Send
+                            |
+                            button.cancel-btn.custom-btn(type='button') Cancel
+            |
+            script(src='js/script.js')
+            |
+            |
+            style.
+                body, html {
+                    height: 100%;
+                    padding: 0;
+                    margin: 0;
+                    font-family: 'Sniglet', cursive;
+                    background-color: #98d4f3;
+                }
+
+                .hidden {
+                    display: none !important;
+                }
+
+                h2 {
+                    color: #fff;
+                }
+
+                .yes-btn {
+                    width: 100px;
+                    height: 100px;
+                    border: none;
+                    border-radius: 50%;
+                    outline: none;
+                    color: #98d4f3;
+                    font-family: 'Raleway', sans-serif;
+                    font-size: 25px;
+                    background-color: #fff;
+                }
+
+                .yes-btn:hover {
+                    color: #F90;
+                }
+
+                .question-box, .form-box, .thanks-msg-box {
+                    width: 30%;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .thanks-msg-box {
+                    text-align: center;
+                }
+
+                .question-box {
+                    align-items: center;
+                    text-align: center;
+                }
+
+                .text-box {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                input, textarea {
+                    border-radius: 5px;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                    font-family: 'Sniglet', cursive;
+                    font-size: 16px;
+                    color: #808080;
+                    background-color: #fff;
+                    border: none;
+                    outline: none;
+                }
+
+                textarea {
+                    height: 200px;
+                    resize: none;
+                    overflow: auto;
+                }
+
+                label {
+                    color: #fff;
+                    font-size: 24px;
+                }
+
+                .btns-box {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                }
+
+                .send-btn {
+                    background-color: #F90;
+                }
+
+                .send-btn:hover {
+                    background-color: #e58f0e;
+                }
+
+                .cancel-btn {
+                    background-color: #808080;
+                }
+
+                .cancel-btn:hover {
+                    background-color: #696969;
+                }
+
+                .custom-btn {
+                    width: 48%;
+                    height: 40px;
+                    font-size: 18px;
+                    border-radius: 5px;
+                    color: #fff;
+                    font-family: 'Raleway', sans-serif;
+                    outline: none;
+                    border: none;
+                }
+
+                /* Animation */
+                @keyframes myfishanimation {
+                    0% {
+                        margin-left: -235px
+                    }
+                    70% {
+                        margin-left: 100%;
+                    }
+                    100% {
+                        margin-left: 100%;
+                    }
+                }
+
+                @keyframes myoctoanimation {
+                    from {
+                        transform: translate3d(0, 0, 0);
+                    }
+                    to {
+                        transform: translate3d(0, 200px, 0);
+                    }
+                }
+
+                .fish {
+                    background-image: url('http://www.geertjanhendriks.nl/codepen/form/fish.png');
+                    width: 235px;
+                    height: 104px;
+                    margin-left: -235px;
+                    position: absolute;
+                    animation: myfishanimation 24s;
+                    -webkit-animation: myfishanimation 24s;
+                    animation-iteration-count: infinite;
+                    -webkit-animation-iteration-count: infinite;
+                    animation-timing-function: linear;
+                    -webkit-animation-timing-function: linear;
+                }
+
+                #fish {
+                    top: 120px;
+                }
+
+                #fish2 {
+                    top: 360px;
+                    animation-delay: 12s;
+                    -webkit-animation-delay: 12s;
+                }
+
+                #fish3 {
+                    top: 600px;
+                    animation-delay: 6s;
+                    -webkit-animation-delay: 6s;
+                }
+
+                .octo {
+                    background-image: url('http://www.geertjanhendriks.nl/codepen/form/octo.png');
+                    width: 66px;
+                    height: 97px;
+                    position: absolute;
+                    right: -20%;
+                    transform-origin: 50% 50%;
+                    animation: myoctoanimation 2s linear alternate infinite;
+                }
+            |
+            script.
+                document.querySelector(".yes-btn").addEventListener("click", function () {
+                    document.querySelector(".form-box").classList.remove("hidden")
+                    document.querySelector(".question-box").classList.add("hidden")
+                })
+                document.querySelector(".cancel-btn").addEventListener("click", function () {
+                    document.querySelector(".form-box").classList.add("hidden")
+                })
+                document.querySelector(".send-btn").addEventListener("click", function () {
+                    document.querySelector(".form-box").classList.add("hidden")
+                    document.querySelector(".question-box").classList.add("hidden")
+                    document.querySelector(".thanks-msg-box").classList.remove("hidden")
+                })

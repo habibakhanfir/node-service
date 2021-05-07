@@ -1,0 +1,40 @@
+version: "3.1"
+services:
+  expressjs:
+    build:
+      context: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command:
+      npm start
+    ports:
+      - 3000:3000
+    networks:
+      serviceexpress:
+        ipv4_address: 11.10.0.2
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: nodemongo
+    environment:
+      MONGO_INITDB_DATABASE: project
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - 27019:27017
+    networks:
+      serviceexpress:
+        ipv4_address: 11.10.0.3
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo-js:ro
+      - ./storage/database:/data/db
+
+networks:
+  serviceexpress:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 11.10.0.0/16

@@ -1,0 +1,70 @@
+extends layout
+
+block content
+    h1.mt-5 Posts list
+
+        a.btn.btn-warning(href="/createform") Create Post
+        div.navbar-default
+        if (posts_list.length)
+            each post in posts_list
+                div.card.mb-3
+                    div.card-header
+                        span=post.user.name + ' said'
+                        span.float-right
+                            a(href="javascript:;", onclick="getLikers('" + post._id + "')") Likes(#{post.likes_count})
+                    div.card-body=post.body
+                    div.card-footer
+                        div.float-right
+                            if (post.is_liked)
+                                a.btn.btn-warning.unlike-post(href="javascript:;", onclick="unlike_post('" + post._id + "')" , data-post-id=post._id) Unlike
+                            else
+                                a.btn.btn-primary.like-post(href="javascript:;" , data-post-id=post._id) Like
+                            if (post.is_owner)
+                                a.btn.btn-success(href="/updateform/" + post._id) Update
+                                a.btn.btn-danger(href='/deletepost/' + post._id, onclick="return confirm('Are you sure ?')") Delete
+        else
+            h4.mt-5 No posts found
+
+block scripts
+    script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+    script.
+        $(function () {
+            $(document).on('click', '.like-post', function () {
+                let like_button = $(this);
+                let post_id = $(this).data('post-id');
+                $.ajax({
+                    type: "POST",
+                    url: "/likepost/" + post_id,
+                    success: function () {
+                        let current_likes_count = parseInt($('#likes-count-'+post_id).text());
+                        $('#likes-count-'+post_id).text(current_likes_count + 1);
+                        like_button.replaceWith('<a href="javascript:;" class="btn btn-warning unlike-post" data-post-id="' + post_id + '">Unlike</a>');
+                    },
+                    error: function (error) {
+                        alert('Post cant be liked');
+                    }
+                });
+            });
+            $(document).on('click', '.unlike-post', function () {
+                let unlike_button = $(this);
+                let post_id = $(this).data('post-id');
+                $.ajax({
+                    type: "POST",
+                    url: "/unlikepost/" + post_id,
+                    success: function () {
+                        let current_likes_count = parseInt($('#likes-count-' + post_id).text());
+                        $('#likes-count-' + post_id).text(current_likes_count - 1);
+                        unlike_button.replaceWith('<a href="javascript:;" class="btn btn-primary like-post" data-post-id="' + post_id + '">Like</a>');
+                    },
+                    error: function (error) {
+                        alert('Post cant be unliked');
+                    }
+                });
+            });
+        });
+
+block style
+    style.
+        h1, h1 {
+            font-size: 1rem;
+        }
